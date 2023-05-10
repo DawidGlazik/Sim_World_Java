@@ -6,10 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import rosliny.*;
 import swiat.*;
 
-public class Okno implements KeyListener{
+public class Okno implements KeyListener, MouseListener{
 	private int wysokosc,szerokosc;
 	private Organizm plansza[][];
 	private Swiat symulacja;
@@ -51,6 +54,8 @@ public class Okno implements KeyListener{
 	private void plansza() {
 		panelPlanszy = new JPanel();
 	    panelPlanszy.setLayout(new GridLayout(wysokosc, szerokosc));
+	    panelPlanszy.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	    panelPlanszy.addMouseListener(this);
 	    for (int i = 0; i < wysokosc; i++) {
 	        for (int j = 0; j < szerokosc; j++) {
 	            JPanel panel = new JPanel();
@@ -80,7 +85,7 @@ public class Okno implements KeyListener{
 	
 	private void menu() {
 		panelMenu = new JPanel();
-        panelMenu.setLayout(new FlowLayout());
+        panelMenu.setLayout(new BorderLayout());
 
         JButton button1 = new JButton("Tura");
         JButton button2 = new JButton("Zapisz");
@@ -105,7 +110,6 @@ public class Okno implements KeyListener{
             @Override
             public void actionPerformed(ActionEvent e) {
             	symulacja.wykonajTure(0);
-            	System.out.println(symulacja.konsola);
             	symulacja.konsola = "";
             	odswiez();
             }
@@ -121,10 +125,15 @@ public class Okno implements KeyListener{
             }
         });
         
-        panelMenu.add(button1);
-        panelMenu.add(button2);
-        panelMenu.add(button3);
-        panelMenu.add(button4);
+        JLabel napis = new JLabel("Tura:"+symulacja.getTura());
+        panelMenu.add(napis, BorderLayout.WEST);
+        
+        JPanel pomoc = new JPanel(new FlowLayout());
+        pomoc.add(button1);
+        pomoc.add(button2);
+        pomoc.add(button3);
+        pomoc.add(button4);
+        panelMenu.add(pomoc, BorderLayout.CENTER);
         
         frame.add(panelMenu, BorderLayout.SOUTH);
 	}
@@ -137,22 +146,18 @@ public class Okno implements KeyListener{
 
 		        if (keyCode == KeyEvent.VK_UP) {
 		        	symulacja.wykonajTure(1);
-		        	System.out.println(symulacja.konsola);
 		        	symulacja.konsola = "";
 		        	odswiez();
 		        } else if (keyCode == KeyEvent.VK_DOWN) {
 		        	symulacja.wykonajTure(2);
-		        	System.out.println(symulacja.konsola);
 		        	symulacja.konsola = "";
 		        	odswiez();
 		        } else if (keyCode == KeyEvent.VK_LEFT) {
 		        	symulacja.wykonajTure(3);
-		        	System.out.println(symulacja.konsola);
 		        	symulacja.konsola = "";
 		        	odswiez();
 		        } else if (keyCode == KeyEvent.VK_RIGHT) {
 		        	symulacja.wykonajTure(4);
-		        	System.out.println(symulacja.konsola);
 		        	symulacja.konsola = "";
 		        	odswiez();
 		        }
@@ -167,4 +172,40 @@ public class Okno implements KeyListener{
     @Override
     public void keyTyped(KeyEvent e) {
     }
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		int x = e.getX();
+        int y = e.getY();
+        int szerokoscKwadratu = panelPlanszy.getWidth() / szerokosc;
+        int wysokoscKwadratu = panelPlanszy.getHeight() / wysokosc;
+        int kolumna = x / szerokoscKwadratu;
+        int wiersz = y / wysokoscKwadratu;
+
+        System.out.println("Kliknięto kwadrat [" + kolumna + ", " + wiersz + "]");
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }

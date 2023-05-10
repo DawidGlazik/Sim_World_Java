@@ -125,6 +125,8 @@ public class Swiat {
 			organizmy.get(i).addWiek(1);
 		}
 		this.tura++;
+		System.out.println("Tura:"+tura);
+		System.out.println(konsola);
 	}
 	
 	public void rysujSwiat() {
@@ -165,6 +167,10 @@ public class Swiat {
 		return this.wysokosc;
 	}
 	
+	public int getTura() {
+		return this.tura;
+	}
+	
 	public void zapisz() {
 		
 	}
@@ -176,8 +182,7 @@ public class Swiat {
 	public static void main(String[] args) {
 		Swiat swiat = new Swiat(20,10);
 		swiat.wypiszOrganizmy();
-		swiat.rysujSwiat();
-		
+		swiat.rysujSwiat();		
 	}
 
 	
