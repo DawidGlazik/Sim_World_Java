@@ -285,7 +285,6 @@ public class Swiat {
 	
 	public static void main(String[] args) {
 		Swiat swiat = new Swiat(20,10);
-		swiat.wypiszOrganizmy();
 		swiat.rysujSwiat();		
 	}
 
