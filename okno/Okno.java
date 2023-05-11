@@ -115,6 +115,21 @@ public class Okno implements KeyListener, MouseListener{
             }
         });
         
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	symulacja.zapisz();
+            }
+        });
+        
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	symulacja.wczytaj();
+            	odswiez();
+            }
+        });
+        
         button4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -165,6 +180,10 @@ public class Okno implements KeyListener, MouseListener{
 		}
     }
 
+	private void dodajOrganizm() {
+		
+	}
+	
     @Override
     public void keyReleased(KeyEvent e) {
     }
@@ -181,7 +200,7 @@ public class Okno implements KeyListener, MouseListener{
         int wysokoscKwadratu = panelPlanszy.getHeight() / wysokosc;
         int kolumna = x / szerokoscKwadratu;
         int wiersz = y / wysokoscKwadratu;
-
+        dodajOrganizm();
         System.out.println("Kliknięto kwadrat [" + kolumna + ", " + wiersz + "]");
 	}
 

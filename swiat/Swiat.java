@@ -1,9 +1,15 @@
 package swiat;
+import java.io.IOException;
 import java.util.ArrayList;
 import rosliny.*;
 import zwierzeta.*;
 import java.util.Random;
 import okno.Okno;
+import java.io.FileWriter;
+import javax.swing.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.BufferedReader;
 
 public class Swiat {
 	private int tura;
@@ -171,12 +177,110 @@ public class Swiat {
 		return this.tura;
 	}
 	
-	public void zapisz() {
-		
+	public void zapisz() {		
+		String plik = JOptionPane.showInputDialog(null, "Podaj nazwę pliku:");
+        if (plik != null && !plik.isEmpty()) {
+            zapiszDoPliku(plik);
+        } else {
+            return;
+        }
+	}
+	
+	private void zapiszDoPliku(String plik) {
+		String zawartosc = String.valueOf(this.tura) + " " + String.valueOf(this.szerokosc) + " " + String.valueOf(this.wysokosc) + "\n";
+		for (int i=0;i<organizmy.size();i++) {
+			zawartosc += organizmy.get(i).getNazwa() + " " + organizmy.get(i).getPolozenie().getX() + " " + organizmy.get(i).getPolozenie().getY() + " " + organizmy.get(i).getSila() + " " + organizmy.get(i).getWiek() + " ";
+			if (organizmy.get(i) instanceof Czlowiek) {
+				Czlowiek tmp = (Czlowiek) organizmy.get(i);
+				zawartosc += tmp.getTrwanie() + " " + tmp.getPrzerwa();
+			}
+			zawartosc += "\n";
+		}
+	    try (FileWriter writer = new FileWriter(plik)) {
+	        writer.write(zawartosc);
+	        System.out.println("Pomyslnie zapisano stan symulacji.");
+	    } catch (IOException e) {
+	        System.out.println("Wystąpił błąd podczas zapisu do pliku: " + e.getMessage());
+	    }
 	}
 	
 	public void wczytaj() {
-		
+		String plik = JOptionPane.showInputDialog(null, "Podaj nazwę pliku:");
+		File file = new File(plik);
+        if (file.exists() && plik != null && !plik.isEmpty()) {
+            wczytajZPliku(plik);
+        } else {
+        	System.out.println("Plik nie istnieje. Wczytywanie zakończone niepowodzeniem.");
+        }
+	}
+	
+	private void wczytajZPliku(String plik) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(plik))) {
+			String nazwa;
+			int x, y, wiek, sila, przerwa, trwanie;
+			plansza = null;
+			organizmy.clear();
+			
+            String linia = reader.readLine();
+            String[] elementy = linia.split(" ");
+            this.tura = Integer.parseInt(elementy[0]);
+            this.szerokosc = Integer.parseInt(elementy[1]);
+            this.wysokosc = Integer.parseInt(elementy[2]);
+            plansza = new Organizm[wysokosc][szerokosc];
+            organizmy = new ArrayList<>();
+            
+            for (int i = 0; i < wysokosc; i++) {
+    		    for (int j = 0; j < szerokosc; j++) {
+    		        plansza[i][j] = new Pole(this, new Polozenie(j,i));
+    		    }
+    		}
+            
+            while ((linia = reader.readLine()) != null) {
+            	elementy = linia.split(" ");
+            	nazwa = elementy[0];
+            	x = Integer.parseInt(elementy[1]);
+            	y = Integer.parseInt(elementy[2]);
+            	sila = Integer.parseInt(elementy[3]);
+            	wiek = Integer.parseInt(elementy[4]);
+            	if (nazwa.equals("Barszcz_sosnowskiego")) {
+            		dodajOrganizm(new BarszczSosnowskiego(this, new Polozenie( x, y ), wiek));
+    			}
+    			else if (nazwa.equals("Guarana")) {
+    				dodajOrganizm(new Guarana(this, new Polozenie( x, y ), wiek));
+    			}
+    			else if (nazwa.equals("Mlecz")) {
+    				dodajOrganizm(new Mlecz(this, new Polozenie( x, y ), wiek));
+    			}
+    			else if (nazwa.equals("Trawa")) {
+    				dodajOrganizm(new Trawa(this, new Polozenie( x, y ), wiek));
+    			}
+    			else if (nazwa.equals("Wilcze_jagody")) {
+    				dodajOrganizm(new WilczeJagody(this, new Polozenie( x, y ), wiek));
+    			}
+    			else if (nazwa.equals("Antylopa")) {
+    				dodajOrganizm(new Antylopa(this, new Polozenie( x, y ), sila, wiek));
+    			}
+    			else if (nazwa.equals("Lis")) {
+    				dodajOrganizm(new Lis(this, new Polozenie( x, y ), sila, wiek));
+    			}
+    			else if (nazwa.equals("Owca")) {
+    				dodajOrganizm(new Owca(this, new Polozenie( x, y ), sila, wiek));
+    			}
+    			else if (nazwa.equals("Wilk")) {
+    				dodajOrganizm(new Wilk(this, new Polozenie( x, y ), sila, wiek));
+    			}
+    			else if (nazwa.equals("Zolw")) {
+    				dodajOrganizm(new Zolw(this, new Polozenie( x, y ), sila, wiek));
+    			}
+    			else if (nazwa.equals("Czlowiek")) {
+    				trwanie = Integer.parseInt(elementy[5]);
+    				przerwa = Integer.parseInt(elementy[6]);
+    				dodajOrganizm(new Czlowiek(this, new Polozenie( x, y ), sila, wiek, trwanie, przerwa));
+    			}
+            }
+        } catch (IOException e) {
+            System.err.println("Błąd podczas wczytywania pliku: " + e.getMessage());
+        }
 	}
 	
 	public static void main(String[] args) {
