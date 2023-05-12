@@ -287,10 +287,4 @@ public class Swiat {
 		return true;
 	}
 	
-	public static void main(String[] args) {
-		Swiat swiat = new Swiat(20,10);
-		swiat.rysujSwiat();		
-	}
-
-	
 }
