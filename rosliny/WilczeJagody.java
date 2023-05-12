@@ -24,7 +24,7 @@ public class WilczeJagody extends Roslina{
 	protected void sprawdzIZasiej(int x1, int y1) {
 		String komentarz;
 		if (this.swiat.plansza[this.xy.getX()+x1][this.xy.getY()+y1] instanceof Pole) {
-			komentarz = "Zasiano " + this.getNazwa() + (this.xy.getX() + x1 + 1) + "," + (this.xy.getY()+y1+1) + ")";
+			komentarz = "Zasiano " + this.getNazwa() + "(" + (this.xy.getX() + x1 + 1) + "," + (this.xy.getY()+y1+1) + ")";
 			this.swiat.dziennik(komentarz);
 			this.swiat.dodajOrganizm(new WilczeJagody(this.swiat, new Polozenie(this.xy.getX()+x1, this.xy.getY()+y1)));
 		}

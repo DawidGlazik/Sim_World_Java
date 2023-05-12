@@ -1,15 +1,11 @@
 package swiat;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import rosliny.*;
 import zwierzeta.*;
 import java.util.Random;
 import okno.Okno;
-import java.io.FileWriter;
 import javax.swing.*;
-import java.io.File;
-import java.io.FileReader;
-import java.io.BufferedReader;
 
 public class Swiat {
 	private int tura;
@@ -21,12 +17,12 @@ public class Swiat {
 	
 	public Swiat() {
 		this.tura = 0;
-		this.konsola = "";
+		this.konsola = "Zdarzenia: ";
 	}
 	
 	public Swiat(int szerokosc, int wysokosc) {
 		this.tura = 0;
-		this.konsola = "";
+		this.konsola = "Zdarzenia: ";
 		this.szerokosc = szerokosc;
 		this.wysokosc = wysokosc;
 		organizmy = new ArrayList<>();
@@ -162,7 +158,7 @@ public class Swiat {
 	
 	public void dziennik(String konsola) {
 		this.konsola += konsola;
-		this.konsola += "\n";
+		this.konsola += "; ";
 	}
 	
 	public int getSzerokosc() {
@@ -177,16 +173,15 @@ public class Swiat {
 		return this.tura;
 	}
 	
-	public void zapisz() {		
+	public boolean zapisz() {		
 		String plik = JOptionPane.showInputDialog(null, "Podaj nazwę pliku:");
         if (plik != null && !plik.isEmpty()) {
-            zapiszDoPliku(plik);
-        } else {
-            return;
+            return zapiszDoPliku(plik);
         }
+        return false;
 	}
 	
-	private void zapiszDoPliku(String plik) {
+	private boolean zapiszDoPliku(String plik) {
 		String zawartosc = String.valueOf(this.tura) + " " + String.valueOf(this.szerokosc) + " " + String.valueOf(this.wysokosc) + "\n";
 		for (int i=0;i<organizmy.size();i++) {
 			zawartosc += organizmy.get(i).getNazwa() + " " + organizmy.get(i).getPolozenie().getX() + " " + organizmy.get(i).getPolozenie().getY() + " " + organizmy.get(i).getSila() + " " + organizmy.get(i).getWiek() + " ";
@@ -199,22 +194,29 @@ public class Swiat {
 	    try (FileWriter writer = new FileWriter(plik)) {
 	        writer.write(zawartosc);
 	        System.out.println("Pomyslnie zapisano stan symulacji.");
+	        return true;
 	    } catch (IOException e) {
 	        System.out.println("Wystąpił błąd podczas zapisu do pliku: " + e.getMessage());
+	        return false;
 	    }
 	}
 	
-	public void wczytaj() {
+	public int wczytaj() {
 		String plik = JOptionPane.showInputDialog(null, "Podaj nazwę pliku:");
 		File file = new File(plik);
         if (file.exists() && plik != null && !plik.isEmpty()) {
-            wczytajZPliku(plik);
+            if (wczytajZPliku(plik)) {
+            	return 1;
+            }else {
+            	return 2;
+            }
         } else {
         	System.out.println("Plik nie istnieje. Wczytywanie zakończone niepowodzeniem.");
+        	return 3;
         }
 	}
 	
-	private void wczytajZPliku(String plik) {
+	private boolean wczytajZPliku(String plik) {
 		try (BufferedReader reader = new BufferedReader(new FileReader(plik))) {
 			String nazwa;
 			int x, y, wiek, sila, przerwa, trwanie;
@@ -242,7 +244,7 @@ public class Swiat {
             	y = Integer.parseInt(elementy[2]);
             	sila = Integer.parseInt(elementy[3]);
             	wiek = Integer.parseInt(elementy[4]);
-            	if (nazwa.equals("Barszcz_sosnowskiego")) {
+            	if (nazwa.equals("Barszcz_Sosnowskiego")) {
             		dodajOrganizm(new BarszczSosnowskiego(this, new Polozenie( x, y ), wiek));
     			}
     			else if (nazwa.equals("Guarana")) {
@@ -254,7 +256,7 @@ public class Swiat {
     			else if (nazwa.equals("Trawa")) {
     				dodajOrganizm(new Trawa(this, new Polozenie( x, y ), wiek));
     			}
-    			else if (nazwa.equals("Wilcze_jagody")) {
+    			else if (nazwa.equals("Wilcze_Jagody")) {
     				dodajOrganizm(new WilczeJagody(this, new Polozenie( x, y ), wiek));
     			}
     			else if (nazwa.equals("Antylopa")) {
@@ -280,7 +282,9 @@ public class Swiat {
             }
         } catch (IOException e) {
             System.err.println("Błąd podczas wczytywania pliku: " + e.getMessage());
+            return false;
         }
+		return true;
 	}
 	
 	public static void main(String[] args) {

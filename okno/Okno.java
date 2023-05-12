@@ -15,6 +15,7 @@ public class Okno implements KeyListener, MouseListener{
 	private JFrame frame = new JFrame();
 	private JPanel panelPlanszy = new JPanel();
 	private JPanel panelMenu = new JPanel();
+	private JPanel panelLog = new JPanel();
 	
 	public Okno(Swiat swiat, int wysokosc, int szerokosc, Organizm plansza[][]) {
 		this.symulacja = swiat;
@@ -28,7 +29,9 @@ public class Okno implements KeyListener, MouseListener{
 		frame.setTitle("Dawid Glazik 193069");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
-        frame.setSize(50 * szerokosc + 100, 50 * wysokosc + 100);
+        double Ox = (double) wysokosc / szerokosc;
+        double Oy = 1000 * Ox;
+        frame.setSize(1000, (int) Oy);
         plansza();
         menu();
         frame.setLocationRelativeTo(null);
@@ -38,7 +41,7 @@ public class Okno implements KeyListener, MouseListener{
 	}
 
 	private void odswiez() {
-	    this.plansza = symulacja.plansza;
+		this.plansza = symulacja.plansza;
 	    frame.remove(panelPlanszy);
 	    frame.remove(panelMenu);
 	    plansza();
@@ -49,11 +52,11 @@ public class Okno implements KeyListener, MouseListener{
 
 	private void plansza() {
 		panelPlanszy = new JPanel();
-	    panelPlanszy.setLayout(new GridLayout(wysokosc, szerokosc));
+	    panelPlanszy.setLayout(new GridLayout(symulacja.getWysokosc(), symulacja.getSzerokosc()));
 	    panelPlanszy.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	    panelPlanszy.addMouseListener(this);
-	    for (int i = 0; i < wysokosc; i++) {
-	        for (int j = 0; j < szerokosc; j++) {
+	    for (int i = 0; i < symulacja.getWysokosc(); i++) {
+	        for (int j = 0; j < symulacja.getSzerokosc(); j++) {
 	            JPanel panel = new JPanel();
 	            panel.setLayout(new BorderLayout());
 	            Color kolor = new Color(255, 0, 0);
@@ -88,60 +91,77 @@ public class Okno implements KeyListener, MouseListener{
 	    frame.add(panelPlanszy, BorderLayout.CENTER);
 	}
 
+	private void log() {
+		panelLog = new JPanel();
+		panelLog.setLayout(new BorderLayout());
+		JLabel label = new JLabel();
+		label.setText(symulacja.konsola);
+		panelLog.add(label, BorderLayout.CENTER);
+		frame.add(panelLog, BorderLayout.SOUTH);
+	}
 	
 	private void menu() {
 		panelMenu = new JPanel();
         panelMenu.setLayout(new BorderLayout());
 
-        JButton button1 = new JButton("Tura");
-        JButton button2 = new JButton("Zapisz");
-        JButton button3 = new JButton("Wczytaj");
-        JButton button4 = new JButton("Calopalenie");
+        JButton przycisk1 = new JButton("Tura");
+        JButton przycisk2 = new JButton("Zapisz");
+        JButton przycisk3 = new JButton("Wczytaj");
+        JButton przycisk4 = new JButton("Calopalenie");
 
         for (int i=0; i<symulacja.organizmy.size(); i++) {
 			if (symulacja.organizmy.get(i) instanceof Czlowiek) {
 				Czlowiek tmp = (Czlowiek) symulacja.organizmy.get(i);
 				if (tmp.getTrwanie() != 5) {
-					button4.setEnabled(false);
+					przycisk4.setEnabled(false);
 				}
 				else {
-					button4.setEnabled(true);
+					przycisk4.setEnabled(true);
 				}
 				break;
 			}
-			button4.setEnabled(false);
+			przycisk4.setEnabled(false);
 		}
         
-        button1.addActionListener(new ActionListener() {
+        log();
+        panelMenu.add(panelLog, BorderLayout.SOUTH);
+        
+        przycisk1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             	symulacja.wykonajTure(0);
-            	symulacja.konsola = "";
             	odswiez();
+            	symulacja.konsola = "Zdarzenia: ";
             }
         });
         
-        button2.addActionListener(new ActionListener() {
+        przycisk2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	symulacja.zapisz();
+            	if (symulacja.zapisz()) symulacja.konsola = "Pomyslnie zapisano stan symulacji.";
+            	else symulacja.konsola = "Wystąpił błąd podczas zapisu do pliku.";
+            	odswiez();
+            	symulacja.konsola = "Zdarzenia: ";
             }
         });
         
-        button3.addActionListener(new ActionListener() {
+        przycisk3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	symulacja.wczytaj();
+            	if (symulacja.wczytaj() == 1) symulacja.konsola = "Pomyslnie wczytano stan symulacji.";
+            	else if (symulacja.wczytaj() == 2) symulacja.konsola = "Wystąpił błąd podczas wczytywania pliku.";
+            	else symulacja.konsola = "Plik nie istnieje. Wczytywanie zakończone niepowodzeniem.";
             	odswiez();
+            	symulacja.konsola = "Zdarzenia: ";
             }
         });
         
-        button4.addActionListener(new ActionListener() {
+        przycisk4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             	symulacja.rozpocznijCalopalenie();
             	System.out.println(symulacja.konsola);
-            	symulacja.konsola = "";
+            	symulacja.konsola = "Zdarzenia: ";
             	odswiez();
             }
         });
@@ -150,10 +170,11 @@ public class Okno implements KeyListener, MouseListener{
         panelMenu.add(napis, BorderLayout.WEST);
         
         JPanel pomoc = new JPanel(new FlowLayout());
-        pomoc.add(button1);
-        pomoc.add(button2);
-        pomoc.add(button3);
-        pomoc.add(button4);
+        pomoc.add(przycisk1);
+        pomoc.add(przycisk2);
+        pomoc.add(przycisk3);
+        pomoc.add(przycisk4);
+        
         panelMenu.add(pomoc, BorderLayout.CENTER);
         
         frame.add(panelMenu, BorderLayout.SOUTH);
@@ -163,24 +184,24 @@ public class Okno implements KeyListener, MouseListener{
     public void keyPressed(KeyEvent e) {
 		for (int i=0; i<symulacja.organizmy.size(); i++) {
 			if (symulacja.organizmy.get(i) instanceof Czlowiek) {
-				int keyCode = e.getKeyCode();
+				int kod = e.getKeyCode();
 
-		        if (keyCode == KeyEvent.VK_UP) {
+		        if (kod == KeyEvent.VK_UP) {
 		        	symulacja.wykonajTure(1);
-		        	symulacja.konsola = "";
 		        	odswiez();
-		        } else if (keyCode == KeyEvent.VK_DOWN) {
+		        	symulacja.konsola = "Zdarzenia: ";
+		        } else if (kod == KeyEvent.VK_DOWN) {
 		        	symulacja.wykonajTure(2);
-		        	symulacja.konsola = "";
 		        	odswiez();
-		        } else if (keyCode == KeyEvent.VK_LEFT) {
+		        	symulacja.konsola = "Zdarzenia: ";
+		        } else if (kod == KeyEvent.VK_LEFT) {
 		        	symulacja.wykonajTure(3);
-		        	symulacja.konsola = "";
 		        	odswiez();
-		        } else if (keyCode == KeyEvent.VK_RIGHT) {
+		        	symulacja.konsola = "Zdarzenia: ";
+		        } else if (kod == KeyEvent.VK_RIGHT) {
 		        	symulacja.wykonajTure(4);
-		        	symulacja.konsola = "";
 		        	odswiez();
+		        	symulacja.konsola = "Zdarzenia: ";
 		        }
 			}
 		}
@@ -197,36 +218,36 @@ public class Okno implements KeyListener, MouseListener{
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    JButton clickedButton = (JButton) e.getSource();
-                    String selectedOption = clickedButton.getText();
-                    if (selectedOption.equals("Barszcz Sosnowskiego")) {
+                    JButton klikniety = (JButton) e.getSource();
+                    String wybrano = klikniety.getText();
+                    if (wybrano.equals("Barszcz Sosnowskiego")) {
                 		symulacja.dodajOrganizm(new BarszczSosnowskiego(symulacja, new Polozenie( x, y )));
         			}
-        			else if (selectedOption.equals("Guarana")) {
+        			else if (wybrano.equals("Guarana")) {
         				symulacja.dodajOrganizm(new Guarana(symulacja, new Polozenie( x, y )));
         			}
-        			else if (selectedOption.equals("Mlecz")) {
+        			else if (wybrano.equals("Mlecz")) {
         				symulacja.dodajOrganizm(new Mlecz(symulacja, new Polozenie( x, y )));
         			}
-        			else if (selectedOption.equals("Trawa")) {
+        			else if (wybrano.equals("Trawa")) {
         				symulacja.dodajOrganizm(new Trawa(symulacja, new Polozenie( x, y )));
         			}
-        			else if (selectedOption.equals("Wilcze Jagody")) {
+        			else if (wybrano.equals("Wilcze Jagody")) {
         				symulacja.dodajOrganizm(new WilczeJagody(symulacja, new Polozenie( x, y )));
         			}
-        			else if (selectedOption.equals("Antylopa")) {
+        			else if (wybrano.equals("Antylopa")) {
         				symulacja.dodajOrganizm(new Antylopa(symulacja, new Polozenie( x, y )));
         			}
-        			else if (selectedOption.equals("Lis")) {
+        			else if (wybrano.equals("Lis")) {
         				symulacja.dodajOrganizm(new Lis(symulacja, new Polozenie( x, y )));
         			}
-        			else if (selectedOption.equals("Owca")) {
+        			else if (wybrano.equals("Owca")) {
         				symulacja.dodajOrganizm(new Owca(symulacja, new Polozenie( x, y )));
         			}
-        			else if (selectedOption.equals("Wilk")) {
+        			else if (wybrano.equals("Wilk")) {
         				symulacja.dodajOrganizm(new Wilk(symulacja, new Polozenie( x, y )));
         			}
-        			else if (selectedOption.equals("Zolw")) {
+        			else if (wybrano.equals("Zolw")) {
         				symulacja.dodajOrganizm(new Zolw(symulacja, new Polozenie( x, y )));
         			}
                     dialog.dispose();
@@ -243,12 +264,10 @@ public class Okno implements KeyListener, MouseListener{
 	}
 	
     @Override
-    public void keyReleased(KeyEvent e) {
-    }
+    public void keyReleased(KeyEvent e) {}
 
     @Override
-    public void keyTyped(KeyEvent e) {
-    }
+    public void keyTyped(KeyEvent e) {}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -265,26 +284,14 @@ public class Okno implements KeyListener, MouseListener{
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mousePressed(MouseEvent e) {}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseReleased(MouseEvent e) {}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseEntered(MouseEvent e) {}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseExited(MouseEvent e) {}
 }
