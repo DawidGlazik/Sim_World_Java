@@ -43,73 +43,73 @@ public class Zwierze extends Organizm{
 		if (this.xy.getX() == 0) {
 			if (this.xy.getY() == 0) {
 				los = rand.nextInt(3);
-				if (los == 0) ruch(0, 1);
-				else if (los == 1) ruch(1, 1);
-				else if (los == 2) ruch(1, 0);
+				if (los == 0) narodziny(0, 1);
+				else if (los == 1) narodziny(1, 1);
+				else if (los == 2) narodziny(1, 0);
 			}
 			else if (this.xy.getY() == this.swiat.getSzerokosc() - 1) {
 				los = rand.nextInt(3);
-				if (los == 0) ruch(0, -1);
-				else if (los == 1) ruch(1, -1);
-				else if (los == 2) ruch(1, 0);
+				if (los == 0) narodziny(0, -1);
+				else if (los == 1) narodziny(1, -1);
+				else if (los == 2) narodziny(1, 0);
 			}
 			else {
 				los = rand.nextInt(5);
-				if (los == 0) ruch(0, -1);
-				else if (los == 1) ruch(1, -1);
-				else if (los == 2) ruch(1, 0);
-				else if (los == 3) ruch(0, 1);
-				else if (los == 4) ruch(1, 1);
+				if (los == 0) narodziny(0, -1);
+				else if (los == 1) narodziny(1, -1);
+				else if (los == 2) narodziny(1, 0);
+				else if (los == 3) narodziny(0, 1);
+				else if (los == 4) narodziny(1, 1);
 			}
 		}
 		else if (this.xy.getX() == this.swiat.getWysokosc() - 1) {
 			if (this.xy.getY() == 0) {
 				los = rand.nextInt(3);
-				if (los == 0) ruch(0, 1);
-				else if (los == 1) ruch(-1, 1);
-				else if (los == 2) ruch(-1, 0);
+				if (los == 0) narodziny(0, 1);
+				else if (los == 1) narodziny(-1, 1);
+				else if (los == 2) narodziny(-1, 0);
 			}
 			else if (this.xy.getY() == this.swiat.getSzerokosc() - 1) {
 				los = rand.nextInt(3);
-				if (los == 0) ruch(0, -1);
-				else if (los == 1) ruch(-1, -1);
-				else if (los == 2) ruch(-1, 0);
+				if (los == 0) narodziny(0, -1);
+				else if (los == 1) narodziny(-1, -1);
+				else if (los == 2) narodziny(-1, 0);
 			}
 			else {
 				los = rand.nextInt(5);
-				if (los == 0) ruch(0, 1);
-				else if (los == 1) ruch(-1, 1);
-				else if (los == 2) ruch(-1, 0);
-				else if (los == 3) ruch(0, -1);
-				else if (los == 4) ruch(-1, -1);
+				if (los == 0) narodziny(0, 1);
+				else if (los == 1) narodziny(-1, 1);
+				else if (los == 2) narodziny(-1, 0);
+				else if (los == 3) narodziny(0, -1);
+				else if (los == 4) narodziny(-1, -1);
 			}
 		}
 		else if (this.xy.getY() == 0) {
 			los = rand.nextInt(5);
-			if (los == 0) ruch(0, 1);
-			else if (los == 1) ruch(-1, 1);
-			else if (los == 2) ruch(-1, 0);
-			else if (los == 3) ruch(1, 1);
-			else if (los == 4) ruch(1, 0);
+			if (los == 0) narodziny(0, 1);
+			else if (los == 1) narodziny(-1, 1);
+			else if (los == 2) narodziny(-1, 0);
+			else if (los == 3) narodziny(1, 1);
+			else if (los == 4) narodziny(1, 0);
 		}
 		else if (this.xy.getY() == this.swiat.getSzerokosc() - 1) {
 			los = rand.nextInt(5);
-			if (los == 0) ruch(0, -1);
-			else if (los == 1) ruch(-1, -1);
-			else if (los == 2) ruch(-1, 0);
-			else if (los == 3) ruch(1, -1);
-			else if (los == 4) ruch(1, 0);
+			if (los == 0) narodziny(0, -1);
+			else if (los == 1) narodziny(-1, -1);
+			else if (los == 2) narodziny(-1, 0);
+			else if (los == 3) narodziny(1, -1);
+			else if (los == 4) narodziny(1, 0);
 		}
 		else {
 			los = rand.nextInt(8);
-			if (los == 0) ruch(0, 1);
-			else if (los == 1) ruch(1, 0);
-			else if (los == 2) ruch(1, 1);
-			else if (los == 3) ruch(-1, 0);
-			else if (los == 4) ruch(-1, 1);
-			else if (los == 5) ruch(-1, -1);
-			else if (los == 6) ruch(0, -1);
-			else if (los == 7) ruch(1, -1);
+			if (los == 0) narodziny(0, 1);
+			else if (los == 1) narodziny(1, 0);
+			else if (los == 2) narodziny(1, 1);
+			else if (los == 3) narodziny(-1, 0);
+			else if (los == 4) narodziny(-1, 1);
+			else if (los == 5) narodziny(-1, -1);
+			else if (los == 6) narodziny(0, -1);
+			else if (los == 7) narodziny(1, -1);
 		}
 	}
 	
