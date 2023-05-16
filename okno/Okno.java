@@ -278,8 +278,13 @@ public class Okno implements KeyListener, MouseListener{
         int kolumna = x / szerokoscKwadratu;
         int wiersz = y / wysokoscKwadratu;
         if (kolumna < szerokosc && wiersz < wysokosc) {
-        	dodajOrganizm(wiersz, kolumna);
+        	if (plansza[wiersz][kolumna] instanceof Pole) {
+        		dodajOrganizm(wiersz, kolumna);
+        	}else {
+        		this.symulacja.konsola += "Miejsce zajete";
+        	}        	
         	odswiez();
+        	symulacja.konsola = "Zdarzenia: ";
         }
 	}
 
