@@ -1,12 +1,12 @@
-import swiat.Swiat;
+import world.World;
 public class Main {
 	
-	private final static int kolumny = 20;
-	private final static int wiersze = 10;
+	private final static int columns = 20;
+	private final static int rows = 10;
 	
 	public static void main(String[] args) {
-		Swiat swiat = new Swiat(kolumny,wiersze);
-		swiat.rysujSwiat();		
+		World world = new World(columns,rows);
+		world.printWorld();		
 	}
 
 }
