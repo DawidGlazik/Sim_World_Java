@@ -248,44 +248,44 @@ public class World {
             	y = Integer.parseInt(elements[2]);
             	strength = Integer.parseInt(elements[3]);
             	age = Integer.parseInt(elements[4]);
-            	if (name.equals("Barszcz_Sosnowskiego")) {
+            	if (name.equals("Hogweed")) {
             		addOrganism(new Hogweed(this, new Coords( x, y ), age));
     			}
     			else if (name.equals("Guarana")) {
     				addOrganism(new Guarana(this, new Coords( x, y ), age));
     			}
-    			else if (name.equals("Mlecz")) {
+    			else if (name.equals("Milt")) {
     				addOrganism(new Milt(this, new Coords( x, y ), age));
     			}
-    			else if (name.equals("Trawa")) {
+    			else if (name.equals("Grass")) {
     				addOrganism(new Grass(this, new Coords( x, y ), age));
     			}
-    			else if (name.equals("Wilcze_Jagody")) {
+    			else if (name.equals("Deadly_Nightshade")) {
     				addOrganism(new DeadlyNightshade(this, new Coords( x, y ), age));
     			}
-    			else if (name.equals("Antylopa")) {
+    			else if (name.equals("Antelope")) {
     				addOrganism(new Antelope(this, new Coords( x, y ), strength, age));
     			}
-    			else if (name.equals("Lis")) {
+    			else if (name.equals("Fox")) {
     				addOrganism(new Fox(this, new Coords( x, y ), strength, age));
     			}
-    			else if (name.equals("Owca")) {
+    			else if (name.equals("Sheep")) {
     				addOrganism(new Sheep(this, new Coords( x, y ), strength, age));
     			}
-    			else if (name.equals("Wilk")) {
+    			else if (name.equals("Wolf")) {
     				addOrganism(new Wolf(this, new Coords( x, y ), strength, age));
     			}
-    			else if (name.equals("Zolw")) {
+    			else if (name.equals("Tirtle")) {
     				addOrganism(new Turtle(this, new Coords( x, y ), strength, age));
     			}
-    			else if (name.equals("Czlowiek")) {
+    			else if (name.equals("Human")) {
     				lasting = Integer.parseInt(elements[5]);
     				brake = Integer.parseInt(elements[6]);
     				addOrganism(new Human(this, new Coords( x, y ), strength, age, lasting, brake));
     			}
             }
         } catch (IOException e) {
-            System.err.println("Błąd podczas wczytywania pliku: " + e.getMessage());
+            System.err.println("Error occured: " + e.getMessage());
             return false;
         }
 		return true;
