@@ -8,9 +8,9 @@ Every organism has its strength, initiative and age. Initiative and age are nece
 Way of moving may be different for some organisms but generally it is one square.
 ### COLLISION
 When the collision occurs:
-    -(animal - animal) - stronger wins and kills weaker one; when strengts are equal, attacking side wins
-    -(animal - plant) - animal eats the plant
-    -(animal - animal) - if animals are the same type, they reproduce
+    - (animal - animal) stronger wins and kills weaker one; when strengts are equal, attacking side wins
+    - (animal - plant) animal eats the plant
+    - (animal - animal) if animals are the same type, they reproduce
 Plants can propagate.
 ### ACTION
 Action is different for different type of organisms. For instance, hogweed kills every animal in the nearest area, fox won't move to field with organism stronger than itself.
